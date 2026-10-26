@@ -2,7 +2,7 @@ const Note = require('../models/Note');
 const express = require('express');
 const router = express.Router();
 
-//Get all events
+//Get all notes
 router.get('/', async (req, res, next) => {
     try {
         const result = await Note.getAll();
