@@ -1,11 +1,13 @@
 const request = require('supertest');
 const app = require('../app.js');
+const db = require('../db.js');
 
 describe('Notes API Integration Tests', () => {
   let createdApplicationId;
   let createdNoteId;
 
   beforeAll(async () => {
+    await db.initDb();
     const appRes = await request(app).post('/applications').send({
         company_name: 'Tech Corp',
         role_title: 'Software Engineer',
@@ -18,6 +20,9 @@ describe('Notes API Integration Tests', () => {
   afterAll(async () => {
     if (createdApplicationId) {
       await request(app).delete(`/applications/${createdApplicationId}`);
+    }
+    if (createdNoteId) {
+      await request(app).delete(`/notes/${createdNoteId}`);
     }
   });
 

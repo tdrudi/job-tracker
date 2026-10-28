@@ -1,5 +1,11 @@
+DROP TABLE IF EXISTS notifications CASCADE;
+DROP TABLE IF EXISTS outreach CASCADE;
+DROP TABLE IF EXISTS interviews_events CASCADE;
+DROP TABLE IF EXISTS contacts CASCADE;
+DROP TABLE IF EXISTS notes CASCADE;
+DROP TABLE IF EXISTS applications CASCADE;
 
-CREATE TABLE IF NOT EXISTS applications (
+CREATE TABLE applications (
   id SERIAL PRIMARY KEY,
   company_name VARCHAR(255) NOT NULL,
   role_title VARCHAR(255) NOT NULL,
@@ -11,12 +17,21 @@ CREATE TABLE IF NOT EXISTS applications (
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS contacts (
+CREATE TABLE notes (
+  id SERIAL PRIMARY KEY,
+  application_id INT REFERENCES applications(id) ON DELETE CASCADE,
+  content TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE contacts (
   id SERIAL PRIMARY KEY,
   application_id INT REFERENCES applications(id) ON DELETE CASCADE,
   first_name VARCHAR(255) NOT NULL,
   last_name VARCHAR(255) NOT NULL,
   role VARCHAR(100), --  Recruiter, Hiring Manager, Technical Interviewer
+  company VARCHAR(255),
   email VARCHAR(255),
   phone VARCHAR(50),
   linkedin_url TEXT,
@@ -25,7 +40,7 @@ CREATE TABLE IF NOT EXISTS contacts (
 
 );
 
-CREATE TABLE IF NOT EXISTS outreach(
+CREATE TABLE outreach(
   id SERIAL PRIMARY KEY,
   application_id INT REFERENCES applications(id) ON DELETE CASCADE,
   contact_id INT REFERENCES contacts(id) ON DELETE CASCADE,
@@ -37,7 +52,7 @@ CREATE TABLE IF NOT EXISTS outreach(
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS interviews_events (
+CREATE TABLE interviews_events (
   id SERIAL PRIMARY KEY,
   application_id INT REFERENCES applications(id) ON DELETE CASCADE, -- NULL if event is general ( Job Fair)
   event_type VARCHAR(100) NOT NULL, --  Phone Screen, Technical Interview, Job Fair
@@ -50,16 +65,7 @@ CREATE TABLE IF NOT EXISTS interviews_events (
 
 );
 
-CREATE TABLE IF NOT EXISTS notes (
-  id SERIAL PRIMARY KEY,
-  application_id INT REFERENCES applications(id) ON DELETE CASCADE,
-  content TEXT NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-
-);
-
-CREATE TABLE IF NOT EXISTS notifications(
+CREATE TABLE notifications(
   id SERIAL PRIMARY KEY,
   application_id INT REFERENCES applications(id) ON DELETE CASCADE,
   title VARCHAR(225) NOT NULL,

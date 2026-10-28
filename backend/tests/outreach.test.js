@@ -7,22 +7,16 @@ let createdContactId;
 let createdNoteId;
 let createdOutreachId;
 
-beforeEach(async () => {
-  // Clear tables in cascade-friendly order
-  await db.query('DELETE FROM outreach');
-  await db.query('DELETE FROM notes');
-  await db.query('DELETE FROM contacts');
-  await db.query('DELETE FROM applications');
+beforeAll(async()=> {
+  await db.initDb();
 
-  // 1. Insert test application
-  const appRes = await db.query(`
+   const appRes = await db.query(`
     INSERT INTO applications (company_name, role_title, status, date_applied)
     VALUES ('Tech Corp', 'Software Engineer', 'Applied', '2026-10-01')
     RETURNING id;
   `);
   createdApplicationId = appRes.rows[0].id;
 
-  // 2. Insert test contact (includes application_id)
   const contactRes = await db.query(`
     INSERT INTO contacts (application_id, first_name, last_name, email, role)
     VALUES ($1, 'Jane', 'Doe', 'jane@techcorp.com', 'Recruiter')
@@ -30,7 +24,6 @@ beforeEach(async () => {
   `, [createdApplicationId]);
   createdContactId = contactRes.rows[0].id;
 
-  // 3. Insert test note (includes application_id and content only)
   const noteRes = await db.query(`
     INSERT INTO notes (application_id, content)
     VALUES ($1, 'Sent standard LinkedIn connection request and follow-up note.')
@@ -38,7 +31,6 @@ beforeEach(async () => {
   `, [createdApplicationId]);
   createdNoteId = noteRes.rows[0].id;
 
-  // 4. Insert test outreach record
   const outreachRes = await db.query(`
     INSERT INTO outreach (application_id, contact_id, contact_method, status, note_id)
     VALUES ($1, $2, 'LinkedIn', 'First contact', $3)

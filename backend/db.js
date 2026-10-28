@@ -32,5 +32,6 @@ initDb();
 module.exports = {
     query: (text, params) => pool.query(text, params),
     connect: () => pool.connect(),
+    initDb,
     pool
 };

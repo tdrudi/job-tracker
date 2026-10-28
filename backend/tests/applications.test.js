@@ -1,8 +1,19 @@
 const request = require('supertest');
 const app = require('../app.js');
+const db = require('../db.js');
 
 describe('Applications API Integration Tests', () => {
   let createdApplicationId;
+
+  beforeAll(async () => {
+    await db.initDb();
+  });
+
+ afterAll(async () => {
+    if (createdApplicationId) {
+      await request(app).delete(`/applications/${createdApplicationId}`);
+    }
+  });
 
   it('should create a new job application', async () => {
     const newApp = {

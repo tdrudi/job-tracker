@@ -37,6 +37,14 @@ export const API = {
   updateContact: (id, data) => request(`/contacts/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
   deleteContact: (id) => request(`/contacts/${id}`, { method: 'DELETE' }),
 
+  // --- Outreach ---
+  getAllOutreach: () => request(`/outreach/`, { method: 'GET' }),
+  getOutreachById: (id) => request(`/outreach/${id}`, { method: 'GET' }),
+  getOutreachByAppId: (id) => request(`/outreach/application/${id}`, { method: 'GET' }),
+  createOutreach: (data) => request(`/outreach/`, { method: 'POST', body: JSON.stringify(data) }),
+  updateOutreach: (id, data) => request(`/outreach/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
+  deleteOutreach: (id) => request(`/outreach/${id}`, { method: 'DELETE' }),
+
   // --- Interviews & Events ---
   getEvents: (filters) => {
     const query = filters ? `?${new URLSearchParams(filters).toString()}` : '';

@@ -1,11 +1,14 @@
 const request = require('supertest');
 const app = require('../app.js');
+const db = require('../db.js');
+
 
 describe('Contacts API Integration Tests', () => {
   let createdApplicationId;
   let createdContactId;
 
   beforeAll(async () => {
+    await db.initDb();
     const appRes = await request(app).post('/applications').send({
         company_name: 'Tech Corp',
         role_title: 'Software Engineer',
@@ -27,12 +30,14 @@ describe('Contacts API Integration Tests', () => {
       first_name: 'Jane',
       last_name: 'Smith',
       role: 'Engineering Recruiter',
+      company: 'Tech Company',
       email: 'jane.smith@techcorp.com',
-      phone: '555-0199',
+      phone: '555-5555',
       linkedin_url: 'https://linkedin.com/in/janesmith'
     };
 
     const res = await request(app).post('/contacts').send(newContact);
+    console.log(res.body);
     expect(res.statusCode).toBe(201);
     expect(res.body).toHaveProperty('id');
     expect(res.body.first_name).toBe('Jane');
@@ -60,7 +65,6 @@ describe('Contacts API Integration Tests', () => {
 
   it('should update a contact using PATCH', async () => {
     const res = await request(app).patch(`/contacts/${createdContactId}`).send({ role: 'Senior Technical Recruiter' });
-
     expect(res.statusCode).toBe(200);
     expect(res.body.role).toBe('Senior Technical Recruiter');
   });

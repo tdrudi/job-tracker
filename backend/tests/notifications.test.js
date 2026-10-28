@@ -1,11 +1,13 @@
 const request = require('supertest');
 const app = require('../app.js');
+const db = require('../db.js');
 
 describe('Notifications API Integration Tests', () => {
   let createdApplicationId;
   let createdNotificationId;
 
   beforeAll(async () => {
+    await db.initDb();
     const appRes = await request(app).post('/applications').send({
         company_name: 'Tech Corp',
         role_title: 'Software Engineer',
@@ -19,6 +21,11 @@ describe('Notifications API Integration Tests', () => {
     if (createdApplicationId) {
       await request(app).delete(`/applications/${createdApplicationId}`);
     }
+
+    if (createdNotificationId) {
+      await request(app).delete(`/notifications/${createdNotificationId}`);
+    }
+
   });
 
   it('should create a new notification', async () => {
