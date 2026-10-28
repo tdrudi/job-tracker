@@ -5,6 +5,7 @@ const app = express();
 
 const appRoutes = require('./routes/applications');
 const contactRoutes = require('./routes/contacts');
+const outreachRoutes = require('./routes/outreach');
 const eventRoutes = require('./routes/events');
 const noteRoutes = require('./routes/notes');
 const notifRoutes = require('./routes/notifications');
@@ -21,6 +22,7 @@ app.get('/', (req, res) => {
 //App routes
 app.use('/applications', appRoutes);
 app.use('/contacts', contactRoutes);
+app.use('/outreach', outreachRoutes);
 app.use('/events', eventRoutes);
 app.use('/notes', noteRoutes);
 app.use('/notifications', notifRoutes);

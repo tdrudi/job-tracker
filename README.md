@@ -22,13 +22,13 @@ A dedicated RESTful API built to handle job applications, contact tracking, and 
 |-- backend/
     |-- middleware/
     |-- routes/
+    |-- tests/
     |-- db.js
     |-- app.js
     |-- schema.sql
     |-- server.js
 |-- frontend/
     |-- api.js
-|-- tests/
 |-- expressError.js
 |-- .env.example
 |-- package.json

@@ -25,6 +25,18 @@ CREATE TABLE IF NOT EXISTS contacts (
 
 );
 
+CREATE TABLE IF NOT EXISTS outreach(
+  id SERIAL PRIMARY KEY,
+  application_id INT REFERENCES applications(id) ON DELETE CASCADE,
+  contact_id INT REFERENCES contacts(id) ON DELETE CASCADE,
+  contact_method VARCHAR(255),
+  follow_up TIMESTAMP,
+  status VARCHAR(255), -- First contact, set up meeting, etc.
+  note_id INT REFERENCES notes(id) ON DELETE CASCADE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE IF NOT EXISTS interviews_events (
   id SERIAL PRIMARY KEY,
   application_id INT REFERENCES applications(id) ON DELETE CASCADE, -- NULL if event is general ( Job Fair)
