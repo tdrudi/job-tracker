@@ -26,9 +26,7 @@ class Notification {
     const result = await db.query(`
       SELECT  id, application_id title, message, notification_type, reminder_date, is_read, is_sent, created_at, updated_at 
       FROM notifications 
-      WHERE application_id = $1 
-      ORDER BY reminder_date ASC
-    `, [id]);
+      WHERE id = $1`, [id]);
     return result.rows[0];
   }
 
@@ -37,7 +35,7 @@ class Notification {
     const result = await db.query(`
       INSERT INTO notifications (application_id, title, message, notification_type, reminder_date)
       VALUES ($1, $2, $3, $4, $5)
-      RETURNING  id, application_id title, message, notification_type, reminder_date, is_read, is_sent, created_at, updated_at
+      RETURNING  id, application_id, title, message, notification_type, reminder_date, is_read, is_sent, created_at, updated_at
     `,[application_id || null, title, message || null, notification_type || 'custom', reminder_date]);
    
     return result.rows[0];
@@ -55,7 +53,7 @@ class Notification {
           is_sent = COALESCE($6, is_sent),
           updated_at = CURRENT_TIMESTAMP
       WHERE id = $7
-      RETURNING id, application_id title, message, notification_type, reminder_date, is_read, is_sent, created_at, updated_at`,
+      RETURNING id, application_id, title, message, notification_type, reminder_date, is_read, is_sent, created_at, updated_at`,
         [title, message, notification_type, reminder_date, is_read, is_sent, id]);
 
     return result.rows[0];

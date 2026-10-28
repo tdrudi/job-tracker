@@ -35,8 +35,6 @@ router.get('/:id', async (req, res, next) => {
     }
 });
 
-
-
 //Create new event
 router.post('/', async (req, res, next) => {
     try {

@@ -58,7 +58,7 @@ class Application {
         `SELECT id, application_id, content, created_at, updated_at 
               FROM notes
               WHERE application_id = $1
-              ORDER BY created_at DESC;`, [id]);
+              ORDER BY created_at DESC`, [id]);
 
       return {
         ...appResult.rows[0],
@@ -77,8 +77,8 @@ class Application {
       const result = await db.query(`
       INSERT INTO applications (company_name, role_title, status, date_applied, salary_range, job_url)
       VALUES ($1, $2, $3, $4, $5, $6)
-      RETURNING company_name, role_title, status, date_applied, salary_range, job_url, created_at, updated_at ;
-    `, [company_name, role_title, status || 'Applied', date_applied, salary_range || null, job_url || null,]);
+      RETURNING id, company_name, role_title, status, date_applied, salary_range, job_url, created_at, updated_at`,
+        [company_name, role_title, status || 'Applied', date_applied, salary_range || null, job_url || null,]);
     
       return result.rows[0];
     } catch {
@@ -99,8 +99,8 @@ class Application {
           job_url = COALESCE($6, job_url),
           updated_at = CURRENT_TIMESTAMP
       WHERE id = $7
-      RETURNING ompany_name, role_title, status, date_applied, salary_range, job_url, id, created_at, updated_at
-    `[company_name, role_title, status, date_applied, salary_range, job_url, id]);
+      RETURNING id, company_name, role_title, status, date_applied, salary_range, job_url, id, created_at, updated_at`,
+        [company_name, role_title, status, date_applied, salary_range, job_url, id]);
       return result.rows[0];
     } catch {
       throw new ExpressError('Application could not be updated.');
@@ -110,7 +110,7 @@ class Application {
   // Delete application
   static async delete(id) {
     try {
-      const result = await db.query(`DELETE FROM applications WHERE id = $1 RETURNING id`[id]);
+      const result = await db.query(`DELETE FROM applications WHERE id = $1 RETURNING id`, [id]);
       return result.rows[0];
     } catch {
       throw new ExpressError('Application could not be deleted.');

@@ -43,7 +43,7 @@ class Contact {
         WHERE application_id = $1
         ORDER BY created_at DESC`, [id]);
       
-    return result.rows[0];
+    return (result.rows || []);
   }
 
   static async create({ application_id, first_name, last_name, role, email, phone, linkedin_url }) {
